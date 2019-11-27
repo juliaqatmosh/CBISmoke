@@ -1,4 +1,4 @@
-package com.generic.tests.FG.HomePage;
+package com.generic.tests.GR.HomePage;
 
 import com.generic.page.HomePage;
 import com.generic.setup.SelTestCase;
