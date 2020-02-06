@@ -7,8 +7,6 @@ import com.generic.setup.SelTestCase;
 
 public class MiniCartValidation extends SelTestCase {
 
-	public static final String PDPSearchTerm = "lights";
-
 	public static void validate() throws Exception {
 
 		getCurrentFunctionName(true);
@@ -28,7 +26,7 @@ public class MiniCartValidation extends SelTestCase {
 			HomePage.clickOnMiniCartCloseBtn();
 			sassert().assertTrue(HomePage.validateMiniCartIsClosed(), "Mini cart modal is not closed");
 		}
-		PDP.NavigateToPDP(PDPSearchTerm);
+		PDP.NavigateToPDP();
 		PDP.addProductsToCart();
 		if (!isMobile()) {
 			PDP.clickAddToCartCloseBtn();

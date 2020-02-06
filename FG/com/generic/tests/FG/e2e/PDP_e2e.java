@@ -2,7 +2,11 @@ package com.generic.tests.FG.e2e;
 
 import java.text.MessageFormat;
 import java.util.NoSuchElementException;
+
+import com.generic.page.PDP;
+import com.generic.page.PLP;
 import com.generic.setup.ExceptionMsg;
+import com.generic.setup.PDPs;
 import com.generic.setup.SelTestCase;
 import com.generic.tests.FG.PDP.PDPValidation;
 
@@ -14,8 +18,15 @@ public class PDP_e2e extends SelTestCase {
 
 		try {
 			getCurrentFunctionName(true);
-			PDPValidation.validate(singlePDPSearchTerm, false);
-
+			/*
+			PLP.pickPLPRandomProduct();
+			PDPValidation.validate(false);
+			*/
+			PDPs.navigateToRandomPDP();
+			Thread.sleep(3500);
+			PDP.clickAddToCartButtonNoBundle();
+			Thread.sleep(3500);
+			
 			getCurrentFunctionName(false);
 		} catch (NoSuchElementException e) {
 			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {

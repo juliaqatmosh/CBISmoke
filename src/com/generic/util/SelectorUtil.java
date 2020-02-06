@@ -33,6 +33,7 @@ import ru.yandex.qatools.ashot.Screenshot;
 import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
 
 import com.generic.selector.LoginSelectors;
+import com.generic.setup.Common;
 import com.generic.setup.ExceptionMsg;
 import com.generic.setup.GlobalVariables;
 import com.generic.setup.LoggingMsg;
@@ -280,6 +281,19 @@ public class SelectorUtil extends SelTestCase {
 
 	}
 
+	
+	public static void writeToFieldPWA(WebElement field, String value) {
+		getCurrentFunctionName(true);
+
+		int index = 0;
+		for (index = 0; index < value.length(); index++) {
+			String character = String.valueOf(value.charAt(index));
+			field.sendKeys(character);
+		}
+		getCurrentFunctionName(false);
+
+	}
+	
 	public static String getStringSelectorForElements(Elements foundElements, String selType) {
 		getCurrentFunctionName(true);
 
@@ -896,9 +910,24 @@ public class SelectorUtil extends SelTestCase {
 
 			Thread.sleep(500);
 		} catch (Exception e) {
-			logs.debug(MessageFormat.format(LoggingMsg.FORMATTED_ERROR_MSG, e.getMessage()));
-			throw new NoSuchElementException("No such element: " + Arrays.asList(webElementsInfo));
+			if ((e.getMessage() != null) && e.getMessage().contains("element click intercepted")) {
+					logs.debug(MessageFormat.format(LoggingMsg.FORMATTED_ERROR_MSG, e.getMessage()));
+					logs.debug("Refresh the browser to close the Intercepted windows");
+					Common.refreshBrowser();
+					logs.debug(MessageFormat.format(LoggingMsg.DEBUGGING_TEXT, Arrays.asList(webElementsInfo)));
+					SelectorUtil.initializeElementsSelectorsMaps(webElementsInfo, isValidationStep);
+					logs.debug(MessageFormat.format(LoggingMsg.DEBUGGING_TEXT, Arrays.asList(webElementsInfo)));
 
+					for (String key : webElementsInfo.keySet()) {
+						LinkedHashMap<String, Object> webElementInfo = webElementsInfo.get(key);
+						SelectorUtil.doAppropriateAction(webElementInfo, action);
+					}
+
+					Thread.sleep(500);
+			} else {
+				logs.debug(MessageFormat.format(LoggingMsg.FORMATTED_ERROR_MSG, e.getMessage()));
+				throw new NoSuchElementException("No such element: " + Arrays.asList(webElementsInfo));
+			}
 		} finally {
 			valuesArr.clear();
 			subStrArr.clear();
@@ -1005,7 +1034,7 @@ public class SelectorUtil extends SelTestCase {
 	public static WebElement getRandomWebElement(List<WebElement> items) throws Exception {
 		logs.debug("WebElement List Size = " + items.size());
 		Random random = new Random();
-		int index = random.nextInt(items.size());
+		int index = random.nextInt(items.size() - 1);
 		WebElement element = items.get(index);
 		return element;
 
@@ -1093,12 +1122,23 @@ public class SelectorUtil extends SelTestCase {
 		getCurrentFunctionName(true);
 
 		logs.debug("Open account menu for PWA mobile");
-
-		// Open the account menu.
-		openMobileAccountMenu();
-
+		String signInSelector = LoginSelectors.accountMenuList;
+		if (isRY()) {
+			signInSelector = LoginSelectors.RYAccountMenuList.get();
+		}
+		if (isRY()) {
+			boolean isMobileMenuOpened = SelectorUtil.isElementExist(By.cssSelector(LoginSelectors.RYMenuContainer.get()));
+			if (!isMobileMenuOpened) {
+				SelectorUtil.initializeSelectorsAndDoActions(LoginSelectors.GHRYMobileMenuBuuton.get());
+			}
+		} else {
+			// Open the account menu.
+			openMobileAccountMenu();
+		}
+		
+		SelectorUtil.waitElementLoading(By.cssSelector(signInSelector));
 		// Get an account items list.
-		List<WebElement> menuItems = SelectorUtil.getElementsList(LoginSelectors.accountMenuList);
+		List <WebElement> menuItems = SelectorUtil.getElementsList(signInSelector);
 		WebElement linkElement = menuItems.get(0);
 		int index = 0;
 		// Get the Sign in/create account page or welcome message item.
@@ -1176,6 +1216,7 @@ public class SelectorUtil extends SelTestCase {
 			public final static String index = selectIndex + ",{0}";
 			public final static String select = "FFFS";
 			public final static String selectOption = select + "{0}";
+			public final static String Click = ForceAction+",click";
 		}
 	}
 

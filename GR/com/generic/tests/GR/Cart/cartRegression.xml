@@ -13,7 +13,7 @@
 		</classes>
 	</test>
 
-	<test name="cart iPad FG">
+	<test name="cart iPad GR">
 		<parameter name="browserName" value="mobile_iPad"></parameter>
 		<parameter name="Env" value="prod"></parameter>
 		<parameter name="Brand" value="GR"></parameter>

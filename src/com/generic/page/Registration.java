@@ -2,8 +2,13 @@ package com.generic.page;
 
 import java.text.MessageFormat;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.NoSuchElementException;
+
+import org.openqa.selenium.WebElement;
+
 import com.generic.selector.RegistrationSelectors;
+import com.generic.setup.Common;
 import com.generic.setup.ExceptionMsg;
 import com.generic.setup.LoggingMsg;
 import com.generic.setup.SelTestCase;
@@ -41,11 +46,22 @@ public class Registration extends SelTestCase {
 		try {
 			getCurrentFunctionName(true);
 			logs.debug(MessageFormat.format(LoggingMsg.TYPING_ELEMENT_VALUE, "firstname ", firstName));
-			SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.firstName.get(), firstName);
+			if (isGH() || isRY()) {
+				if (isMobile()) {
+					List<WebElement> fields = SelectorUtil.getAllElements(RegistrationSelectors.firstNameGH.get());
+					SelectorUtil.writeToFieldPWA(fields.get(0),firstName);
+				} else
+					SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.firstNameGH.get(), firstName);
+			}
+
+			else
+				SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.firstName.get(), firstName);
 			getCurrentFunctionName(false);
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Firstname field selector was not found by selenuim",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 
@@ -56,11 +72,21 @@ public class Registration extends SelTestCase {
 		try {
 			getCurrentFunctionName(true);
 			logs.debug(MessageFormat.format(LoggingMsg.TYPING_ELEMENT_VALUE, "lastname ", lastName));
-			SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.lastName.get(), lastName);
+			if (isGH() || isRY()) {
+				if (isMobile()) {
+					List<WebElement> fields = SelectorUtil.getAllElements(RegistrationSelectors.lastNameGH.get());
+					SelectorUtil.writeToFieldPWA(fields.get(2),lastName);
+				} else
+					SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.lastNameGH.get(), lastName);
+
+			} else
+				SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.lastName.get(), lastName);
 			getCurrentFunctionName(false);
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Last naem field selector was not found by selenuim",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 
@@ -71,11 +97,21 @@ public class Registration extends SelTestCase {
 		try {
 			getCurrentFunctionName(true);
 			logs.debug(MessageFormat.format(LoggingMsg.TYPING_ELEMENT_VALUE, "emailAddress ", address));
+			if(isGH()|| isRY()) {
+				if(isMobile()) {
+					List <WebElement> fields = SelectorUtil.getAllElements(RegistrationSelectors.emailAddressGH.get());
+					SelectorUtil.writeToFieldPWA(fields.get(0),address);
+				}
+				else
+				SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.emailAddressGH.get(), address);
+			}
+			else
 			SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.emailAddress.get(), address);
 			getCurrentFunctionName(false);
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Email field selector was not found by selenuim", new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 
@@ -86,11 +122,22 @@ public class Registration extends SelTestCase {
 		try {
 			getCurrentFunctionName(true);
 			logs.debug(MessageFormat.format(LoggingMsg.TYPING_ELEMENT_VALUE, "password ", password));
-			SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.password.get(), password);
+			if (isGH() || isRY()) {
+
+				if (isMobile()) {
+					List<WebElement> fields = SelectorUtil.getAllElements(RegistrationSelectors.passwordGH.get());
+					SelectorUtil.writeToFieldPWA(fields.get(2),password);
+				} else
+					SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.passwordGH.get(), password);
+
+			} else
+				SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.password.get(), password);
 			getCurrentFunctionName(false);
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Password field selector was not found by selenuim",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 	}
@@ -100,11 +147,23 @@ public class Registration extends SelTestCase {
 		try {
 			getCurrentFunctionName(true);
 			logs.debug(MessageFormat.format(LoggingMsg.TYPING_ELEMENT_VALUE, "confirmPassword", confPassword));
-			SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.confirmPassword.get(), confPassword);
+			if (isGH() || isRY()) {
+				if (isMobile()) {
+					List<WebElement> fields = SelectorUtil
+							.getAllElements(RegistrationSelectors.confirmPasswordGH.get());
+					SelectorUtil.writeToFieldPWA(fields.get(3),confPassword);
+				} else
+					SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.confirmPasswordGH.get(),
+							confPassword);
+
+			} else
+				SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.confirmPassword.get(), confPassword);
 			getCurrentFunctionName(false);
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Confirm password field selector was not found by selenuim",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 	}
@@ -115,12 +174,22 @@ public class Registration extends SelTestCase {
 			getCurrentFunctionName(true);
 			if (!isRY()) {
 				logs.debug(MessageFormat.format(LoggingMsg.TYPING_ELEMENT_VALUE, "companyName", comapnyName));
-				SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.companyName.get(), comapnyName);
+				if (isGH()) {
+					if (isMobile()) {
+						List<WebElement> fields = SelectorUtil
+								.getAllElements(RegistrationSelectors.companyNameGH.get());
+						SelectorUtil.writeToFieldPWA(fields.get(3),comapnyName);
+					} else
+						SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.companyNameGH.get(),
+								comapnyName);
+				} else
+					SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.companyName.get(), comapnyName);
 			}
 			getCurrentFunctionName(false);
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Company field selector was not found by selenuim", new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 	}
@@ -133,8 +202,10 @@ public class Registration extends SelTestCase {
 			SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.registerBtn.get());
 			getCurrentFunctionName(false);
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Register button selector was not found by selenuim",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 
@@ -145,9 +216,10 @@ public class Registration extends SelTestCase {
 			throws Exception {
 		try {
 			getCurrentFunctionName(true);
+			Thread.sleep(1500);
 			if (!"".equals(email))
 				typeEmailAddress(email);
-
+			
 			if (!"".equals(confEmail))
 				typeconfEmailAddress(confEmail);
 
@@ -199,7 +271,6 @@ public class Registration extends SelTestCase {
 			typePhone(RandomUtilities.getRandomPhone());
 
 			clickSaveButton();
-
 			getCurrentFunctionName(false);
 		}
 
@@ -219,8 +290,9 @@ public class Registration extends SelTestCase {
 			SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.saveButton.get(), "");
 			getCurrentFunctionName(false);
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Save button selector was not found by selenuim", new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 
@@ -231,14 +303,20 @@ public class Registration extends SelTestCase {
 		try {
 			getCurrentFunctionName(true);
 			if (isGH() || isRY()) {
-				SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.phoneGH.get(), phone);
-			} else if (isGR() || isFG()) {
+				if (isMobile()) {
+					List<WebElement> fields = SelectorUtil.getAllElements(RegistrationSelectors.phoneGH.get());
+					SelectorUtil.writeToFieldPWA(fields.get(8), phone);
+				} else
+					SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.phoneGH.get(), phone);
+
+			} else if (isGR() || isFG() || isBD()) {
 				SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.phone.get(), phone);
 			}
 			getCurrentFunctionName(false);
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Phone field selector was not found by selenuim", new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 
@@ -248,11 +326,11 @@ public class Registration extends SelTestCase {
 	private static void typeconfEmailAddress(String email) throws Exception {
 		try {
 			getCurrentFunctionName(true);
-			if (isGH()) {
+			if (isGH() ) {
 				if (!isMobile())
 					SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.confirmEmailAddress.get(),
 							email);
-			} else if (isGR() || isFG() || isRY()) {
+			} else if (isGR() || isFG() || isRY() ||isBD()) {
 				SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.confirmEmailAddress.get(), email);
 
 			}
@@ -260,8 +338,10 @@ public class Registration extends SelTestCase {
 			logs.debug("Data is" + email);
 			getCurrentFunctionName(false);
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Confirm email field selector was not found by selenuim",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 
@@ -271,11 +351,20 @@ public class Registration extends SelTestCase {
 	private static void typeAddressLine1(String address) throws Exception {
 		try {
 			getCurrentFunctionName(true);
-			SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.AddressLine1.get(), address);
+			if (isGH() || isRY()) {
+				if (isMobile()) {
+					List<WebElement> fields = SelectorUtil.getAllElements(RegistrationSelectors.AddressLine1GH.get());
+					SelectorUtil.writeToFieldPWA(fields.get(4),address);
+				} else
+					SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.AddressLine1GH.get(), address);
+
+			} else
+				SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.AddressLine1.get(), address);
 			getCurrentFunctionName(false);
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Address field selector was not found by selenuim", new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 
@@ -285,11 +374,19 @@ public class Registration extends SelTestCase {
 	private static void typeCity(String city) throws Exception {
 		try {
 			getCurrentFunctionName(true);
-			SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.city.get(), city);
+			if (isGH() || isRY()) {
+				if (isMobile()) {
+					List<WebElement> fields = SelectorUtil.getAllElements(RegistrationSelectors.cityGH.get());
+					SelectorUtil.writeToFieldPWA(fields.get(6),city);
+				} else
+					SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.cityGH.get(), city);
+			} else
+				SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.city.get(), city);
 			getCurrentFunctionName(false);
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "City field selector was not found by selenuim", new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 
@@ -299,11 +396,16 @@ public class Registration extends SelTestCase {
 	private static void typeState(String state) throws Exception {
 		try {
 			getCurrentFunctionName(true);
-			SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.state.get(), state);
+			if (isGH() || isRY()) {
+				SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.stateGH.get(), state);
+			} else
+				SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.state.get(), state);
 			getCurrentFunctionName(false);
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "State drop down selector was not found by selenuim",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 
@@ -313,11 +415,21 @@ public class Registration extends SelTestCase {
 	private static void typeZipcode(String zipcode) throws Exception {
 		try {
 			getCurrentFunctionName(true);
-			SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.Zipcode.get(), zipcode);
+			if (isGH() || isRY()) {
+				if (isMobile()) {
+					List<WebElement> fields = SelectorUtil.getAllElements(RegistrationSelectors.ZipcodeGH.get());
+					SelectorUtil.writeToFieldPWA(fields.get(7),zipcode);
+				} else
+					SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.ZipcodeGH.get(), zipcode);
+
+			} else
+				SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.Zipcode.get(), zipcode);
 			getCurrentFunctionName(false);
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "ZIP Code field selector was not found by selenuim",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 
@@ -332,8 +444,10 @@ public class Registration extends SelTestCase {
 			getCurrentFunctionName(false);
 			return SelectorUtil.textValue.get();
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "First name error msg selector was not found by selenuim",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 	}
@@ -347,8 +461,10 @@ public class Registration extends SelTestCase {
 			getCurrentFunctionName(false);
 			return SelectorUtil.textValue.get();
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Last name erro msg selector was not found by selenuim",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 
@@ -371,8 +487,10 @@ public class Registration extends SelTestCase {
 			getCurrentFunctionName(false);
 			return SelectorUtil.textValue.get();
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Email address error msg selector was not found by selenuim",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 	}
@@ -394,8 +512,9 @@ public class Registration extends SelTestCase {
 			getCurrentFunctionName(false);
 			return SelectorUtil.textValue.get();
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed
+					+ "Confirm email address error msg selector was not found by selenuim", new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 	}
@@ -418,8 +537,10 @@ public class Registration extends SelTestCase {
 			getCurrentFunctionName(false);
 			return SelectorUtil.textValue.get();
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Password error msg selector was not found by selenuim",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 	}
@@ -441,8 +562,10 @@ public class Registration extends SelTestCase {
 			getCurrentFunctionName(false);
 			return SelectorUtil.textValue.get();
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Confirm password error msg selector was not found by selenuim",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 	}
@@ -464,8 +587,10 @@ public class Registration extends SelTestCase {
 			getCurrentFunctionName(false);
 			return SelectorUtil.textValue.get();
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "First name error msg selector was not found by selenuim",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 	}
@@ -487,14 +612,16 @@ public class Registration extends SelTestCase {
 			getCurrentFunctionName(false);
 			return SelectorUtil.textValue.get();
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Last name error msg selector was not found by selenuim",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 	}
 
 	// done CBI
-	public static String getStreerAddressErrorInvalid() throws Exception {
+	public static String getStreetAddressErrorInvalid() throws Exception {
 		try {
 			getCurrentFunctionName(true);
 
@@ -510,8 +637,10 @@ public class Registration extends SelTestCase {
 			getCurrentFunctionName(false);
 			return SelectorUtil.textValue.get();
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Street address error msg selector was not found by selenuim",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 	}
@@ -533,8 +662,10 @@ public class Registration extends SelTestCase {
 			getCurrentFunctionName(false);
 			return SelectorUtil.textValue.get();
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "City error msg selector was not found by selenuim",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 	}
@@ -555,8 +686,10 @@ public class Registration extends SelTestCase {
 			getCurrentFunctionName(false);
 			return SelectorUtil.textValue.get();
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "State error msg selector was not found by selenuim",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 	}
@@ -578,8 +711,10 @@ public class Registration extends SelTestCase {
 			getCurrentFunctionName(false);
 			return SelectorUtil.textValue.get();
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "ZIP Code error msg selector was not found by selenuim",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 	}
@@ -601,8 +736,10 @@ public class Registration extends SelTestCase {
 			getCurrentFunctionName(false);
 			return SelectorUtil.textValue.get();
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Phone error msg selector was not found by selenuim",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 	}
@@ -614,7 +751,11 @@ public class Registration extends SelTestCase {
 			logs.debug(MessageFormat.format(LoggingMsg.GETTING_TEXT, "welcome Message check"));
 
 			if (isGH()) {
-				SelectorUtil.initializeSelectorsAndDoActions(RegistrationSelectors.welcomeMessageGH.get(), "");
+				try {
+					SelectorUtil.isDisplayed(RegistrationSelectors.welcomeMessageGH.get());
+				} catch (Exception e) {
+					logs.debug("Registration has failed");
+				}
 			}
 
 			else if (isRY()) {
@@ -629,8 +770,10 @@ public class Registration extends SelTestCase {
 
 			return SelectorUtil.textValue.get();
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Registration sucess msg selector was not found by selenuim",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 
@@ -646,7 +789,7 @@ public class Registration extends SelTestCase {
 					.toString());
 
 			// GH
-			if (isGH()) {
+			if (isGH() || isBD()) {
 
 				if (!isMobile()) {
 					logs.debug(
@@ -655,12 +798,12 @@ public class Registration extends SelTestCase {
 
 				} else {
 					logs.debug(MessageFormat.format(LoggingMsg.GETTING_TEXT, "Clicking Register Tab for mobile... GH"));
-					SelectorUtil.getAllElements(RegistrationSelectors.mobileRegistrationTabGH.get()).get(1).click();
+					SelectorUtil.getAllElements(RegistrationSelectors.mobileRegistrationTabGHBD.get()).get(1).click();
 
 					logs.debug(MessageFormat.format(LoggingMsg.GETTING_TEXT,
 							"Clicking Register Button for mobile...  GH"));
 					SelectorUtil
-							.initializeSelectorsAndDoActions(RegistrationSelectors.mobileRegistrationButtonGH.get());
+							.initializeSelectorsAndDoActions(RegistrationSelectors.mobileRegistrationButtonGHBD.get());
 				}
 
 				// RY
@@ -688,37 +831,24 @@ public class Registration extends SelTestCase {
 
 			getCurrentFunctionName(false);
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed
+							+ "Navigation to registration form has failed, a selector was not found by selenuim",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 
 	}
 
 	// Done - CBI
-	@SuppressWarnings("unchecked")
 	public static String registerFreshUser(String email, String password) throws Exception {
-
-		// click on register new user button
-		goToRegistrationForm();
-
-		// prepare random address details
-		LinkedHashMap<String, String> addressDetails = (LinkedHashMap<String, String>) addresses.get("A3");
 
 		// Prepare registration data
 		String firstName = RandomUtilities.getRandomName();
 		String lastName = RandomUtilities.getRandomName();
-		String companyName = RandomUtilities.getRandomName();
 
-		// register new user and validate the results
-		fillRegistrationFirstStep(email, email, password, password);
-
-		Thread.sleep(1500);
-		fillRegistrationSecondStep(firstName, lastName, companyName, addressDetails);
-
-		// Success message needs to be updated on excel to (Welcome to your account at )
-		String registrationSuccessMsg = getRegistrationSuccessMessage();
-		return registrationSuccessMsg;
+		return registerFreshUser(email, password, firstName, lastName);
 	}
 
 	// Done - CBI
@@ -727,7 +857,6 @@ public class Registration extends SelTestCase {
 
 		// click on register new user button
 		Registration.goToRegistrationForm();
-
 		// prepare random address details
 		LinkedHashMap<String, String> addressDetails = (LinkedHashMap<String, String>) addresses.get("A3");
 
@@ -746,5 +875,7 @@ public class Registration extends SelTestCase {
 		String registrationSuccessMsg = Registration.getRegistrationSuccessMessage();
 		return registrationSuccessMsg;
 	}
+	
+
 
 }

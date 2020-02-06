@@ -1,6 +1,7 @@
 package com.generic.tests.GR.Cart;
 
 import java.net.URI;
+import java.util.List;
 import com.generic.page.Cart;
 import com.generic.page.CheckOut;
 import com.generic.setup.SelTestCase;
@@ -43,8 +44,9 @@ public class CartValidation extends SelTestCase {
 		sassert().assertTrue(Cart.checkAddedItemTotalPriceDisplay(),
 				"Added item total price displayed validation has some problems");
 
-		String optionsBefore = Cart.getFirstSavedItemsOptions();
-
+		
+		if(Cart.isItemEditable()) {
+		List <String> optionsBefore = Cart.getFirstSavedItemsOptions();
 		Thread.sleep(2000);
 
 		// Perform edit on first product in cart
@@ -52,11 +54,11 @@ public class CartValidation extends SelTestCase {
 
 		Thread.sleep(3000);
 
-		String optionsAfter = Cart.getlastAddedItemsOptions();
+		List <String> optionsAfter = Cart.getlastAddedItemsOptions();
 
 		// Check if the edit is saved correctly
 		sassert().assertTrue(!optionsBefore.equals(optionsAfter), "Edit item validation has some problems");
-
+		}
 		// Save total before moving item
 		String totalPriceBeforeMove = Cart.getTotalPrice();
 
@@ -77,10 +79,10 @@ public class CartValidation extends SelTestCase {
 
 		Thread.sleep(2000);
 		Cart.moveItemsToCartFromWishlist();
-
+		Thread.sleep(2000);
 		// Deletion and total before and after
 		String totalPriceBeforeDelete = Cart.getTotalPrice();
-
+		Thread.sleep(2000);
 		Cart.clickRemoveBtnForSavedItem();
 
 		Thread.sleep(2000);

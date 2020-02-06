@@ -4,10 +4,12 @@ import com.generic.setup.cselector;
 
 public class CheckOutSelectors
 {
+	public static final cselector GHConfirmationTotal=new cselector("css,.estimated-total > div>span:nth-child(2)");
+	public static final cselector GHPaypalSubmitConfermationMessage=new cselector("css,p.t-checkout-confirmation__header-confirm-message:last-child");
 	//Done CBI
 	//Navigation
 	public static final cselector beginSecureCheckoutButton = new cselector("css,.secure-checkout-button","css,.c-checkout-buttons__checkout .pw--primary");
-	public static final cselector guestCheckoutButton = new cselector("css,.guest-checkout-button-panel > button:nth-child(1)","css,#single-page-checkout-container > div > div.t-checkout-step0.customer-information-panel > div.guest-checkout-form > button");
+	public static final cselector guestCheckoutButton = new cselector("css,.guest-checkout-button-panel > button","css,.guest-checkout-form > button");
 	public static final cselector stepLoaderButton = new cselector("button.pw-button.pw--primary.u-width-full>div>div.c-custom-loader");
 	
 	//Step 1 Multiple Addresses
@@ -51,9 +53,12 @@ public class CheckOutSelectors
 	public static final cselector shippingAndTaxCost = new cselector("css,.costs-holder .gwt-InlineLabel", "css,.pw-ledger__value");
 	public static final cselector subTotalValue = new cselector("css,.costs-holder .subtotal-value"); 
 	public static final cselector creditCardField = new cselector("css,#accountcc", "css,#accountcc"); 
-	public static final cselector monthField = new cselector("css,#exp-month", "css,.c-custom-select");  
+	public static final cselector monthField = new cselector("css,#exp-month", "css,.t-checkout-payment__card-month .c-custom-select");  
 	public static final cselector yearField = new cselector("css,#exp-year", "css,.t-checkout-payment__card-year .c-custom-select"); 
-	public static final cselector cvv = new cselector("css,#cvv", "css,#cvv","css,html body.cvv-provider-body div.animated-label-textbox-panel input#cvv"); 
+	public static final cselector cvv = new cselector("css,#cvv", "css,#cvv","css,html body.cvv-provider-body div.animated-label-textbox-panel input#cvv");
+	public static final cselector cvvGH = new cselector("css,#security-id", "css,#security-id","css,#security-id");
+
+
 	//public static final cselector cvv = new cselector("css,#security-id", "css,#cvv","css,html body.cvv-provider-body div.animated-label-textbox-panel input#cvv"); 
 	public static final cselector placeSecureOrderButton = new cselector("css,.place-order-panel .primary-button","css,.t-checkout-footer .pw--primary");
 	
@@ -61,10 +66,11 @@ public class CheckOutSelectors
 	public static final cselector closeRegisterButton = new cselector("css,.okCancelPanel .button.secondary");
 	public static final cselector itemID= new cselector("css,.gwt-oid-number", "css,.order-item-part-number");
 	public static final cselector closePoromotionalModal= new cselector("css,.extole-js-widget-wrapper.extole-widget-wrapper > a","css,.extole-js-widget-wrapper.extole-widget-wrapper > a");
-	
+	public static final cselector orderID = new cselector("css,.order-number-value","css,.order-number");
+
 	
 	// PayPal
-	public static final cselector paymentPagePayPalTitle=new cselector("css,tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > div:nth-child(2)","css, div > div.pw-accordion__title > a > h1 > span");
+	public static final cselector paymentPagePayPalTitle=new cselector("css,.gwt-TabPanelBottom>div>div > div.gwt-Label","css, div > div.pw-accordion__title > a > h1 > span");
     public static final cselector paymentPagePayPalSubmitBtn=new cselector("css,.place-order-panel > button:nth-child(1)","css,div.c-checkout-buttons__checkout > button");
     public static final cselector paymentSubmitPopUpClose=new cselector("css,#extole-6763275864515365558 > div > div.extole-js-widget-wrapper.extole-widget-wrapper > a","css,#extole-6763275864515365558 > div > div.extole-js-widget-wrapper.extole-widget-wrapper > a");
     public static final cselector paymentPayPalSubmitRegistrationCloseBtn=new cselector("css,td > div > button.secondary");

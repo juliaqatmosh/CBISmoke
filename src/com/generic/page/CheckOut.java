@@ -12,16 +12,17 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import static org.openqa.selenium.support.ui.ExpectedConditions.*;
-
 import com.generic.selector.CartSelectors;
 import com.generic.selector.CheckOutSelectors;
 import com.generic.selector.PayPalSelectors;
 import com.generic.setup.ExceptionMsg;
 import com.generic.setup.GlobalVariables;
 import com.generic.setup.LoggingMsg;
+import com.generic.setup.PDPs;
 import com.generic.setup.SelTestCase;
 import com.generic.util.RandomUtilities;
 import com.generic.util.SelectorUtil;
+import com.generic.page.PayPal;
 
 public class CheckOut extends SelTestCase {
 
@@ -49,8 +50,10 @@ public class CheckOut extends SelTestCase {
 					SelectorUtil.initializeSelectorsAndDoActions(CheckOutSelectors.firstName.get(), firstName);
 				getCurrentFunctionName(false);
 			} catch (NoSuchElementException e) {
-				logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-				}.getClass().getEnclosingMethod().getName()));
+				logs.debug(MessageFormat.format(
+						ExceptionMsg.PageFunctionFailed + "First name field selector was not found by selenium",
+						new Object() {
+						}.getClass().getEnclosingMethod().getName()));
 				throw e;
 			}
 
@@ -67,8 +70,10 @@ public class CheckOut extends SelTestCase {
 
 				getCurrentFunctionName(false);
 			} catch (NoSuchElementException e) {
-				logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-				}.getClass().getEnclosingMethod().getName()));
+				logs.debug(MessageFormat.format(
+						ExceptionMsg.PageFunctionFailed + "Last name field selector was not found by selenium",
+						new Object() {
+						}.getClass().getEnclosingMethod().getName()));
 				throw e;
 			}
 
@@ -86,8 +91,10 @@ public class CheckOut extends SelTestCase {
 
 				getCurrentFunctionName(false);
 			} catch (NoSuchElementException e) {
-				logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-				}.getClass().getEnclosingMethod().getName()));
+				logs.debug(MessageFormat.format(
+						ExceptionMsg.PageFunctionFailed + "Street address field selector was not found by selenium",
+						new Object() {
+						}.getClass().getEnclosingMethod().getName()));
 				throw e;
 			}
 
@@ -100,8 +107,10 @@ public class CheckOut extends SelTestCase {
 				SelectorUtil.initializeSelectorsAndDoActions(CheckOutSelectors.city.get(), city);
 				getCurrentFunctionName(false);
 			} catch (NoSuchElementException e) {
-				logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-				}.getClass().getEnclosingMethod().getName()));
+				logs.debug(MessageFormat.format(
+						ExceptionMsg.PageFunctionFailed + "City field selector was not found by selenium",
+						new Object() {
+						}.getClass().getEnclosingMethod().getName()));
 				throw e;
 			}
 
@@ -118,8 +127,10 @@ public class CheckOut extends SelTestCase {
 
 				getCurrentFunctionName(false);
 			} catch (NoSuchElementException e) {
-				logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-				}.getClass().getEnclosingMethod().getName()));
+				logs.debug(MessageFormat.format(
+						ExceptionMsg.PageFunctionFailed + "ZIP Code field selector was not found by selenium",
+						new Object() {
+						}.getClass().getEnclosingMethod().getName()));
 				throw e;
 			}
 
@@ -136,8 +147,10 @@ public class CheckOut extends SelTestCase {
 
 				getCurrentFunctionName(false);
 			} catch (NoSuchElementException e) {
-				logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-				}.getClass().getEnclosingMethod().getName()));
+				logs.debug(MessageFormat.format(
+						ExceptionMsg.PageFunctionFailed + "Phone field selector was not found by selenium",
+						new Object() {
+						}.getClass().getEnclosingMethod().getName()));
 				throw e;
 			}
 
@@ -150,8 +163,10 @@ public class CheckOut extends SelTestCase {
 				SelectorUtil.initializeSelectorsAndDoActions(CheckOutSelectors.state.get(), state);
 				getCurrentFunctionName(false);
 			} catch (NoSuchElementException e) {
-				logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-				}.getClass().getEnclosingMethod().getName()));
+				logs.debug(MessageFormat.format(
+						ExceptionMsg.PageFunctionFailed + "State drop down selector was not found by selenium",
+						new Object() {
+						}.getClass().getEnclosingMethod().getName()));
 				throw e;
 			}
 
@@ -177,8 +192,10 @@ public class CheckOut extends SelTestCase {
 				getDriver().switchTo().window(mainWindow);
 				getCurrentFunctionName(false);
 			} catch (NoSuchElementException e) {
-				logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-				}.getClass().getEnclosingMethod().getName()));
+				logs.debug(MessageFormat.format(
+						ExceptionMsg.PageFunctionFailed + "Main window selector was not found by selenium",
+						new Object() {
+						}.getClass().getEnclosingMethod().getName()));
 				throw e;
 			}
 
@@ -200,8 +217,10 @@ public class CheckOut extends SelTestCase {
 				getCurrentFunctionName(false);
 				return main;
 			} catch (NoSuchElementException e) {
-				logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-				}.getClass().getEnclosingMethod().getName()));
+				logs.debug(MessageFormat.format(
+						ExceptionMsg.PageFunctionFailed + "PayPal window selector was not found by selenium",
+						new Object() {
+						}.getClass().getEnclosingMethod().getName()));
 				throw e;
 			}
 		}
@@ -209,29 +228,30 @@ public class CheckOut extends SelTestCase {
 		// Done CBI
 		public static void typeCVV(String CVV) throws Exception {
 			try {
-				getCurrentFunctionName(true);
-				// WebDriverWait wait = new WebDriverWait(getDriver(), 15);
+				getCurrentFunctionName(true);				
+				if (isFG() || isGR()) {
+					// Switch to cvv iframe
+					Thread.sleep(2800);
 
-				// Switch to cvv iframe
-				Thread.sleep(2800);
+					// wait for cvv iframe to load
+					waitforCvvFrame();
 
-				// wait for cvv iframe to load
-				waitforCvvFrame();
+					getDriver().switchTo().frame(GlobalVariables.CVV_Iframe_ID);
+					SelectorUtil.initializeSelectorsAndDoActions(CheckOutSelectors.cvv.get(), CVV);
 
-				getDriver().switchTo().frame(GlobalVariables.CVV_Iframe_ID);
+
+				} else if(isGH() || isRY()) {
+					SelectorUtil.initializeSelectorsAndDoActions(CheckOutSelectors.cvvGH.get(), CVV);
+
+				}
 				Thread.sleep(2000);
-				SelectorUtil.initializeSelectorsAndDoActions(CheckOutSelectors.cvv.get(), CVV);
-
-				// WebElement cvvField =
-				// wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(CheckOutSelectors.cvv.get())));
-				// cvvField.sendKeys(CVV);
 
 				// Switch to default frame
 				getDriver().switchTo().defaultContent();
 
 				getCurrentFunctionName(false);
 			} catch (NoSuchElementException e) {
-				logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
+				logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed + "CVV typing failed", new Object() {
 				}.getClass().getEnclosingMethod().getName()));
 				throw e;
 			}
@@ -268,14 +288,14 @@ public class CheckOut extends SelTestCase {
 			try {
 
 				if (getDriver().findElements(By.id(GlobalVariables.CVV_Iframe_ID)).size() != 0)
-					// if ( SelectorUtil.getAllElements((GlobalVariables.CVV_Iframe_ID)).size()!= 0)
 					return true;
 				else
 					return false;
 
 			} catch (NoSuchElementException e) {
-				logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-				}.getClass().getEnclosingMethod().getName()));
+				logs.debug(MessageFormat.format(
+						ExceptionMsg.PageFunctionFailed + "CVV field selector was not found by selenium", new Object() {
+						}.getClass().getEnclosingMethod().getName()));
 				throw e;
 			}
 
@@ -285,11 +305,17 @@ public class CheckOut extends SelTestCase {
 		private static void typeExpireMonth(String month) throws Exception {
 			try {
 				getCurrentFunctionName(true);
+				
+				if(isGH() || isRY())
+					month=month.substring(1);//Remove 0 from 06 
+				
 				SelectorUtil.initializeSelectorsAndDoActions(CheckOutSelectors.monthField.get(), month);
 				getCurrentFunctionName(false);
 			} catch (NoSuchElementException e) {
-				logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-				}.getClass().getEnclosingMethod().getName()));
+				logs.debug(MessageFormat.format(
+						ExceptionMsg.PageFunctionFailed + "Month drop down selector was not found by selenium",
+						new Object() {
+						}.getClass().getEnclosingMethod().getName()));
 				throw e;
 			}
 		}
@@ -298,13 +324,13 @@ public class CheckOut extends SelTestCase {
 		public static void typeExpireYear(String expireYear) throws Exception {
 			try {
 				getCurrentFunctionName(true);
-				getCurrentFunctionName(true);
 				SelectorUtil.initializeSelectorsAndDoActions(CheckOutSelectors.yearField.get(), expireYear);
 				getCurrentFunctionName(false);
-				getCurrentFunctionName(false);
 			} catch (NoSuchElementException e) {
-				logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-				}.getClass().getEnclosingMethod().getName()));
+				logs.debug(MessageFormat.format(
+						ExceptionMsg.PageFunctionFailed + "Year drop down selector was not found by selenium",
+						new Object() {
+						}.getClass().getEnclosingMethod().getName()));
 				throw e;
 			}
 		}
@@ -316,8 +342,10 @@ public class CheckOut extends SelTestCase {
 				SelectorUtil.initializeSelectorsAndDoActions(CheckOutSelectors.creditCardField.get(), cardNumber);
 				getCurrentFunctionName(false);
 			} catch (NoSuchElementException e) {
-				logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-				}.getClass().getEnclosingMethod().getName()));
+				logs.debug(MessageFormat.format(
+						ExceptionMsg.PageFunctionFailed + "Credit card field selector was not found by selenium",
+						new Object() {
+						}.getClass().getEnclosingMethod().getName()));
 				throw e;
 			}
 
@@ -331,23 +359,26 @@ public class CheckOut extends SelTestCase {
 			getCurrentFunctionName(true);
 			// Add products to cart
 			for (int i = 0; i < productsNo; i++) {
+				Thread.sleep(4000);
+
 				PDP.NavigateToPDP();
 
 				if (PDP.bundleProduct()) {
 					PDP.clickBundleItems();
 				}
-
+				
+				Thread.sleep(2000);
 				PDP.addProductsToCart();
-				if (!getBrowserName().contains(GlobalVariables.browsers.iPhone))
-					PDP.clickAddToCartCloseBtn();
 
 				URI url = new URI(getURL());
 				getDriver().get("https://" + url.getHost());
 			}
 			getCurrentFunctionName(false);
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Search for products and add to cart has failed.. ",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 	}
@@ -357,12 +388,13 @@ public class CheckOut extends SelTestCase {
 		try {
 			getCurrentFunctionName(true);
 			logs.debug(MessageFormat.format(LoggingMsg.GETTING_TEXT,
-					"Navigating to cart ..." + getCONFIG().getProperty("RegistrationPage")));
+					"Navigating to cart ..." + getCONFIG().getProperty("Cart")));
 			getDriver().get(new URI(getDriver().getCurrentUrl()).resolve(getCONFIG().getProperty("Cart")).toString());
 			getCurrentFunctionName(false);
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed + "Navigating to Cart by URL has failed ",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 	}
@@ -375,8 +407,9 @@ public class CheckOut extends SelTestCase {
 			logs.debug(MessageFormat.format(LoggingMsg.SEL_TEXT, "Clicking Begin secure checkout button"));
 			getCurrentFunctionName(false);
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed
+					+ "Begin secure checkout button selector was not found by selenium ", new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 	}
@@ -390,8 +423,10 @@ public class CheckOut extends SelTestCase {
 			getCurrentFunctionName(false);
 
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Guest checkout button selector was not found by selenium ",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 
@@ -406,8 +441,10 @@ public class CheckOut extends SelTestCase {
 			logs.debug(MessageFormat.format(LoggingMsg.SEL_TEXT, "Clicking multiple address tab"));
 			getCurrentFunctionName(false);
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Multiple address button selector was not found by selenium ",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 
@@ -422,8 +459,10 @@ public class CheckOut extends SelTestCase {
 			getCurrentFunctionName(false);
 
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Add new address button selector was not found by selenium ",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 
@@ -435,11 +474,13 @@ public class CheckOut extends SelTestCase {
 		try {
 			getCurrentFunctionName(true);
 			for (int buttonIndex = 0; buttonIndex < productsCount; buttonIndex++) {
+				Thread.sleep(2000);
 				// Add new address
 				logs.debug(MessageFormat.format(LoggingMsg.SEL_TEXT, "Clicking add new address button "));
 				SelectorUtil.initializeSelectorsAndDoActions(CheckOutSelectors.addAddressButton.get(),
 						"index," + buttonIndex);
-
+				
+				Thread.sleep(3000);
 				// Filling address fields
 				logs.debug(MessageFormat.format(LoggingMsg.SEL_TEXT, "filling address att index " + buttonIndex));
 				shippingAddress.typeFirstName(addressDetalis.get(CheckOut.shippingAddress.keys.firstName), false);
@@ -453,8 +494,9 @@ public class CheckOut extends SelTestCase {
 			}
 
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed + "Filling first checkout step has failed",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 	}
@@ -472,8 +514,9 @@ public class CheckOut extends SelTestCase {
 			shippingAddress.typePhone(RandomUtilities.getRandomPhone(), true);
 
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed + "Filling first checkout step has failed ",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 	}
@@ -487,8 +530,9 @@ public class CheckOut extends SelTestCase {
 			getCurrentFunctionName(false);
 			return productsNumber;
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed
+					+ "Products container in step two selector was not found by selenium ", new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 	}
@@ -502,8 +546,10 @@ public class CheckOut extends SelTestCase {
 			watiStepTobeready();
 			getCurrentFunctionName(false);
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Next button in step one selector was not found by selenium ",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 	}
@@ -520,9 +566,12 @@ public class CheckOut extends SelTestCase {
 			} else if (isGR()) {
 				state = SelectorUtil.isDisplayed(CheckOutSelectors.stepTwoIdentifierGR.get());
 			}
+			else if (isRY() || isGH()) {
+				state = SelectorUtil.isDisplayed(CheckOutSelectors.productContainerInStepTwo.get());
+			}
 
 			getCurrentFunctionName(false);
-
+			logs.debug("In step 2 state is ---- " + state+ " ----");
 			return state;
 
 		} catch (NoSuchElementException e) {
@@ -553,8 +602,10 @@ public class CheckOut extends SelTestCase {
 
 			getCurrentFunctionName(false);
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Step loader mark selector was not found by selenium ",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 	}
@@ -569,8 +620,10 @@ public class CheckOut extends SelTestCase {
 			watiStepTobeready();
 			getCurrentFunctionName(false);
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Next button in step three selector was not found by selenium ",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 	}
@@ -584,8 +637,10 @@ public class CheckOut extends SelTestCase {
 			watiStepTobeready();
 			getCurrentFunctionName(false);
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Next button in step two selector was not found by selenium ",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 	}
@@ -600,8 +655,10 @@ public class CheckOut extends SelTestCase {
 			getCurrentFunctionName(false);
 
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "email in belling address selector was not found by selenium ",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 	}
@@ -612,9 +669,28 @@ public class CheckOut extends SelTestCase {
 			getCurrentFunctionName(true);
 			int shppingIndex = 0;
 
-			if (getBrowserName().contains(GlobalVariables.browsers.iPhone)) {
+			if (isMobile()) {
 				shppingIndex = 1;
 			}
+			getCurrentFunctionName(false);
+			return SelectorUtil.getNthElement(CheckOutSelectors.shippingAndTaxCost.get(), shppingIndex).getText();
+
+		} catch (NoSuchElementException e) {
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Shipping cost element selector was not found by selenium ",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
+			throw e;
+		}
+	}
+	
+	
+	// Done CBI
+	public static String getShippingCostsRYInStep4() throws Exception {
+		try {
+			getCurrentFunctionName(true);
+			int shppingIndex = 1;
+
 			getCurrentFunctionName(false);
 			return SelectorUtil.getNthElement(CheckOutSelectors.shippingAndTaxCost.get(), shppingIndex).getText();
 
@@ -631,10 +707,41 @@ public class CheckOut extends SelTestCase {
 		try {
 			getCurrentFunctionName(true);
 			int taxIndex = 1;
-
-			if (getBrowserName().contains(GlobalVariables.browsers.iPhone)) {
-				taxIndex = 2 + grTaxIndex;
+			List<WebElement> elements =SelectorUtil.getAllElements(CheckOutSelectors.shippingAndTaxCost.get()); 
+			
+			if (isRY() && !isMobile()) {
+				taxIndex = 1 + grTaxIndex;
 			}
+			
+			if (isMobile()) {
+				taxIndex = 2 + grTaxIndex;
+				
+				if(elements.size()==8 && isFG())
+					taxIndex++;
+			}
+			
+			
+			getCurrentFunctionName(false);
+			return elements.get(taxIndex).getText();
+
+		} catch (NoSuchElementException e) {
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Tax element selector was not found by selenium ", new Object() {
+					}.getClass().getEnclosingMethod().getName()));
+			throw e;
+		}
+	}
+	
+	
+	
+	// Done CBI
+	public static String getTaxCostsRYInStep4() throws Exception {
+
+		try {
+			getCurrentFunctionName(true);
+
+			int taxIndex = 2;
+
 			getCurrentFunctionName(false);
 			return SelectorUtil.getNthElement(CheckOutSelectors.shippingAndTaxCost.get(), taxIndex).getText();
 
@@ -660,8 +767,10 @@ public class CheckOut extends SelTestCase {
 			}
 
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Subtotal element selector was not found by selenium ",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 	}
@@ -681,8 +790,9 @@ public class CheckOut extends SelTestCase {
 			CheckOut.paymentInnformation.typeCVV(paymentDetails.get(CheckOut.paymentInnformation.keys.CVCC));
 			getCurrentFunctionName(false);
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed + "Fill payment method has failed",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 	}
@@ -694,8 +804,10 @@ public class CheckOut extends SelTestCase {
 			SelectorUtil.initializeSelectorsAndDoActions(CheckOutSelectors.placeSecureOrderButton.get());
 			getCurrentFunctionName(false);
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Place order button selector was not found by selenium ",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 
@@ -712,8 +824,9 @@ public class CheckOut extends SelTestCase {
 
 			getCurrentFunctionName(false);
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed
+					+ "Close button for registration modal selector was not found by selenium ", new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 
@@ -728,8 +841,11 @@ public class CheckOut extends SelTestCase {
 			getCurrentFunctionName(false);
 			return productsNumber;
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed
+							+ "Product container in confirmation page selector was not found by selenium ",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 
@@ -759,261 +875,51 @@ public class CheckOut extends SelTestCase {
 
 	}
 
-	// Done CBI
-	public static class PayPal {
-
-		public static void clickOnContinue() throws Exception {
-			try {
-				getCurrentFunctionName(true);
-				List<String> subStrArr = new ArrayList<String>();
-				List<String> valuesArr = new ArrayList<String>();
-				logs.debug("clicking on Agree and continue btn");
-				subStrArr.add(PayPalSelectors.confirmButtonTop);
-				valuesArr.add("");
-				SelectorUtil.initializeSelectorsAndDoActions(subStrArr, valuesArr);
-				getCurrentFunctionName(false);
-			} catch (NoSuchElementException e) {
-				logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-				}.getClass().getEnclosingMethod().getName()));
-				throw e;
-			}
-
-		}
-
-		public static void paymentPageClickContinue() throws Exception {
-			try {
-				getCurrentFunctionName(true);
-				if (!SelectorUtil.isNotDisplayed(CartSelectors.paymentPageCheckNextBtn.get()))
-					SelectorUtil.initializeSelectorsAndDoActions(CartSelectors.paymentPageCheckNextBtn.get());
-				getCurrentFunctionName(false);
-			} catch (NoSuchElementException e) {
-				logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-				}.getClass().getEnclosingMethod().getName()));
-				throw e;
-			}
-		}
-
-		public static String getConfirmationTotalValue() throws Exception {
-			try {
-				getCurrentFunctionName(true);
-				WebElement price = SelectorUtil.getElement(CheckOutSelectors.confirmationTotal.get());
-				getCurrentFunctionName(false);
-				return price.getText().replace("$", "").replace(",", "").trim();
-			} catch (NoSuchElementException e) {
-				logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-				}.getClass().getEnclosingMethod().getName()));
-				throw e;
-			}
-		}
-
-		public static String getConfirmationPageTaxValue() throws Exception {
-			try {
-				getCurrentFunctionName(true);
-				WebElement price = SelectorUtil.getElement(CheckOutSelectors.confirmationPageTax.get());
-				getCurrentFunctionName(false);
-				return price.getText().replace("$", "").replace(",", "").trim();
-			} catch (NoSuchElementException e) {
-				logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-				}.getClass().getEnclosingMethod().getName()));
-				throw e;
-			}
-		}
-
-		public static String getConfirmationPageShippingValue() throws Exception {
-			try {
-				getCurrentFunctionName(true);
-				WebElement price = SelectorUtil.getElement(CheckOutSelectors.confirmationShipping.get());
-				getCurrentFunctionName(false);
-				return price.getText().replace("$", "").replace(",", "").trim();
-			} catch (NoSuchElementException e) {
-				logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-				}.getClass().getEnclosingMethod().getName()));
-				throw e;
-			}
-		}
-
-		public static String getConfirmationPageSubtotalValue() throws Exception {
-			try {
-				getCurrentFunctionName(true);
-				WebElement price = SelectorUtil.getElement(CheckOutSelectors.confirmationPageSubtotal.get());
-				getCurrentFunctionName(false);
-				return price.getText().replace("$", "").replace(",", "").trim();
-			} catch (NoSuchElementException e) {
-				logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-				}.getClass().getEnclosingMethod().getName()));
-				throw e;
-			}
-		}
-
-		public static boolean isPayPalPayment() throws Exception {
-
-			try {
-				getCurrentFunctionName(true);
-				WebElement price = SelectorUtil.getElement(CheckOutSelectors.confirmationPageAccountType.get());
-				boolean result = false;
-				if (price.getText().trim().equals("PayPal Account"))
-					result = true;
-				getCurrentFunctionName(false);
-				return result;
-			} catch (NoSuchElementException e) {
-				logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-				}.getClass().getEnclosingMethod().getName()));
-				throw e;
-			}
-		}
-
-		public static boolean checkConfirmationPageImg() throws Exception {
-			try {
-				getCurrentFunctionName(true);
-				boolean isDisplayed = SelectorUtil.isDisplayed(CheckOutSelectors.confirmationPageProductImg.get())
-						&& SelectorUtil.isImgLoaded(CheckOutSelectors.confirmationPageProductImg.get());
-				getCurrentFunctionName(false);
-				return isDisplayed;
-			} catch (NoSuchElementException e) {
-				logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-				}.getClass().getEnclosingMethod().getName()));
-				throw e;
-			}
-		}
-
-		public static boolean checkOrderNumberAndEmailAndShippingAddress() throws Exception {
-			try {
-				getCurrentFunctionName(true);
-				boolean isDisplayed = SelectorUtil.isDisplayed(CheckOutSelectors.orderNumber.get())
-						&& SelectorUtil.isDisplayed(CheckOutSelectors.email.get())
-						&& SelectorUtil.isDisplayed(CheckOutSelectors.shippingAddress.get());
-				getCurrentFunctionName(false);
-				return isDisplayed;
-			} catch (NoSuchElementException e) {
-				logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-				}.getClass().getEnclosingMethod().getName()));
-				throw e;
-			}
-		}
-
-		public static int getCountOFProductForConfPage() throws Exception {
-			try {
-				getCurrentFunctionName(true);
-
-				List<String> subStrArr = new ArrayList<String>();
-				subStrArr.add(CheckOutSelectors.paypalConfermationPageAllProduct.get());
-				List<WebElement> elements = SelectorUtil.getAllElements(subStrArr);
-				getCurrentFunctionName(false);
-				return elements.size();
-			} catch (NoSuchElementException e) {
-				logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-				}.getClass().getEnclosingMethod().getName()));
-				throw e;
-			}
-		}
-
-		public static boolean isSubmitConfermationMessageDisplayed() throws Exception {
-			try {
-				getCurrentFunctionName(true);
-				boolean isDisplayed = SelectorUtil.isDisplayed(CheckOutSelectors.paypalSubmitConfermationMessage.get());
-				getCurrentFunctionName(false);
-				return isDisplayed;
-			} catch (NoSuchElementException e) {
-				logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-				}.getClass().getEnclosingMethod().getName()));
-				throw e;
-			}
-		}
-
-		public static void closePayPalSubmitPopup() throws Exception {
-			try {
-				getCurrentFunctionName(true);
-				if (!SelectorUtil.isNotDisplayed(CheckOutSelectors.paymentSubmitPopUpClose.get()))
-					SelectorUtil.initializeSelectorsAndDoActions(CheckOutSelectors.paymentSubmitPopUpClose.get());
-				getCurrentFunctionName(false);
-			} catch (NoSuchElementException e) {
-				logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-				}.getClass().getEnclosingMethod().getName()));
-				throw e;
-			}
-		}
-
-		public static void closePayPalSubmitRegestration() throws Exception {
-			try {
-				getCurrentFunctionName(true);
-				closePayPalSubmitPopup();
-				if (!SelectorUtil.isNotDisplayed(CheckOutSelectors.paymentPayPalSubmitRegistrationCloseBtn.get()))
-					SelectorUtil.initializeSelectorsAndDoActions(
-							CheckOutSelectors.paymentPayPalSubmitRegistrationCloseBtn.get());
-				closePayPalSubmitPopup();
-
-				getCurrentFunctionName(false);
-			} catch (NoSuchElementException e) {
-				logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-				}.getClass().getEnclosingMethod().getName()));
-				throw e;
-			}
-		}
-
-		public static void clickPayPalOrderSubmit() throws Exception {
-			try {
-				getCurrentFunctionName(true);
-				SelectorUtil.initializeSelectorsAndDoActions(CheckOutSelectors.paymentPagePayPalSubmitBtn.get());
-				getCurrentFunctionName(false);
-			} catch (NoSuchElementException e) {
-				logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-				}.getClass().getEnclosingMethod().getName()));
-				throw e;
-			}
-		}
-
-		public static boolean isOrderSummaryDisplayed() throws Exception {
-			try {
-				getCurrentFunctionName(true);
-				boolean isDisplayed = SelectorUtil.isDisplayed(CartSelectors.addedItemsTotalPrice.get());
-				getCurrentFunctionName(false);
-				return isDisplayed;
-			} catch (NoSuchElementException e) {
-				logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-				}.getClass().getEnclosingMethod().getName()));
-				throw e;
-			}
-		}
-
-		public static boolean isPaymentPageSelectedAndPayPalSelected() throws Exception {
-			try {
-				getCurrentFunctionName(true);
-				boolean isDisplayed = SelectorUtil.isDisplayed(CheckOutSelectors.paymentPagePayPalTitle.get());
-				getCurrentFunctionName(false);
-				return isDisplayed;
-			} catch (NoSuchElementException e) {
-				logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-				}.getClass().getEnclosingMethod().getName()));
-				throw e;
-			}
-		}
-
-		public static boolean isPayPalModelDisplayed() throws Exception {
-			try {
-				getCurrentFunctionName(true);
-				boolean isDisplayed = SelectorUtil.isDisplayed(PayPalSelectors.userName);
-				getCurrentFunctionName(false);
-				return isDisplayed;
-			} catch (NoSuchElementException e) {
-				logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-				}.getClass().getEnclosingMethod().getName()));
-				throw e;
-			}
-		}
-
-		public static boolean isPayPalShipToPageDisplayed() throws Exception {
-			try {
-				getCurrentFunctionName(true);
-				boolean isDisplayed = SelectorUtil.isDisplayed(PayPalSelectors.continueBtn);
-				getCurrentFunctionName(false);
-				return isDisplayed;
-			} catch (NoSuchElementException e) {
-				logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-				}.getClass().getEnclosingMethod().getName()));
-				throw e;
-			}
+	public static void clickCheckouStepFourConfirmationButton() throws Exception {
+		try {
+			getCurrentFunctionName(true);
+			if (!SelectorUtil.isNotDisplayed(CartSelectors.paymentPageCheckNextBtn.get()))
+				SelectorUtil.initializeSelectorsAndDoActions(CartSelectors.paymentPageCheckNextBtn.get());
+			getCurrentFunctionName(false);
+		} catch (NoSuchElementException e) {
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Confirmation button in step 4 selector was not found by selenium ",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
+			throw e;
 		}
 	}
+	
+	
+	public static boolean isPaymentPageSelectedAndPayPalSelected() throws Exception {
+		try {
+			getCurrentFunctionName(true);
+			boolean isDisplayed = SelectorUtil.isDisplayed(CheckOutSelectors.paymentPagePayPalTitle.get());
+			getCurrentFunctionName(false);
+			return isDisplayed;
+		} catch (NoSuchElementException e) {
+			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed
+					+ "paypal elemet selector in payment was not found by selenium ", new Object() {
+					}.getClass().getEnclosingMethod().getName()));
+			throw e;
+		}
+	}
+
+	
+	public static void clickPayPalOrderSubmit() throws Exception {
+		try {
+			getCurrentFunctionName(true);
+			SelectorUtil.initializeSelectorsAndDoActions(CheckOutSelectors.paymentPagePayPalSubmitBtn.get());
+			getCurrentFunctionName(false);
+		} catch (NoSuchElementException e) {
+			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed
+					+ "Submit button for paypal selector was not found by selenium ", new Object() {
+					}.getClass().getEnclosingMethod().getName()));
+			throw e;
+		}
+	}
+	
+
 
 	public static void clickCreditCardPayment() throws Exception {
 		try {
@@ -1021,11 +927,109 @@ public class CheckOut extends SelTestCase {
 			SelectorUtil.initializeSelectorsAndDoActions(CheckOutSelectors.creditCartTab.get());
 			getCurrentFunctionName(false);
 		} catch (NoSuchElementException e) {
-			logs.debug(MessageFormat.format(ExceptionMsg.PageFunctionFailed, new Object() {
-			}.getClass().getEnclosingMethod().getName()));
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Credit card tab selector in step 4 was not found by selenium ",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
 			throw e;
 		}
 
 	}
+
+	public static void printOrderIDtoLogs() throws Exception {
+		try {
+			getCurrentFunctionName(true);
+			SelectorUtil.initializeSelectorsAndDoActions(CheckOutSelectors.orderID.get());
+			logs.debug(SelectorUtil.textValue.toString().replace("text is :", "Order ID is: "));
+
+			getCurrentFunctionName(false);
+		} catch (NoSuchElementException e) {
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Order ID Container selector was not found by selenium ",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
+			throw e;
+		}
+
+	}
+	
+	public static void addRandomProductTocart(int prodCount) throws Exception {
+		try {
+			getCurrentFunctionName(true);
+
+			for (int count = 0; count < prodCount; count++) {
+				PDPs.navigateToRandomPDP();
+				Thread.sleep(3500);
+				PDP.clickAddToCartButtonNoBundle();
+				Thread.sleep(3500);
+			}
+			getCurrentFunctionName(false);
+		} catch (NoSuchElementException e) {
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Order ID Container selector was not found by selenium ",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
+			throw e;
+		}
+
+	}
+	
+	
+	public static void checkOrderValues(int AddedProdsCount,String orderShippingInStepFour,String orderTaxInStepFour,String orderSubTotalInStepFour ) throws Exception {
+		try {
+			getCurrentFunctionName(true);
+			
+			// Check number of products in confirmation page
+			sassert().assertEquals(CheckOut.checkProductsinConfirmationPage(), AddedProdsCount,"Some products are missing in confirmation page ");
+
+			// Check if shipping costs match
+			sassert().assertEquals(CheckOut.getShippingCosts(), orderShippingInStepFour, "Shipping cost value issue ");
+
+			// Check if tax cost match
+			sassert().assertEquals(CheckOut.getTaxCosts(GlobalVariables.FG_TAX_CONFIRMATION), orderTaxInStepFour,"Tax value issue ");
+
+			// Check if subtotal value match
+			sassert().assertEquals(CheckOut.getSubTotal(), orderSubTotalInStepFour, "Subtotal value issue ");
+			
+			getCurrentFunctionName(false);
+		} catch (NoSuchElementException e) {
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Order ID Container selector was not found by selenium ",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
+			throw e;
+		}
+
+	}
+	
+	
+	public static void checkOrderValuesGR(int AddedProdsCount,String orderShippingInStepFour,String orderTaxInStepFour,String orderSubTotalInStepFour ) throws Exception {
+		try {
+			getCurrentFunctionName(true);
+			
+			// Check number of products in confirmation page
+			sassert().assertEquals(CheckOut.checkProductsinConfirmationPage(), AddedProdsCount,"Some products are missing in confirmation page ");
+
+			// Check if shipping costs match
+			sassert().assertEquals(CheckOut.getShippingCosts(), orderShippingInStepFour, "Shipping cost value issue ");
+
+			// Check if tax cost match
+			sassert().assertEquals(CheckOut.getTaxCosts(GlobalVariables.GR_TAX_CONFIRMATION), orderTaxInStepFour,"Tax value issue ");
+
+			// Check if subtotal value match
+			sassert().assertEquals(CheckOut.getSubTotal(), orderSubTotalInStepFour, "Subtotal value issue ");
+			
+			getCurrentFunctionName(false);
+		} catch (NoSuchElementException e) {
+			logs.debug(MessageFormat.format(
+					ExceptionMsg.PageFunctionFailed + "Order ID Container selector was not found by selenium ",
+					new Object() {
+					}.getClass().getEnclosingMethod().getName()));
+			throw e;
+		}
+
+	}
+	
+
 
 }

@@ -45,7 +45,7 @@ public class SelTestCase {
 	public static SASLogger logs = new SASLogger("Default");
 
 	// protected SoftAssert softAssert = new SoftAssert();
-	private static ThreadLocal<SoftAssert> softAssert = new ThreadLocal<SoftAssert>();
+	private static ThreadLocal<CustomSoftAssert> softAssert = new ThreadLocal<CustomSoftAssert>();
 	public static ThreadLocal<XmlTest> testObj = new ThreadLocal<XmlTest>();
 
 	// private static ThreadLocal<String> testName= new ThreadLocal<String>();
@@ -79,11 +79,20 @@ public class SelTestCase {
 	public static LinkedHashMap<String, Object> addresses = null;
 	public static LinkedHashMap<String, Object> invintory = null;
 	public static LinkedHashMap<String, Object> paymentCards = null;
+	public static LinkedHashMap<String, Object> products = null;
+	
 	private static String URL;
 
 	public static boolean isFGGR() {
 		getCurrentFunctionName(true);
 		boolean result = isFG() || isGR();
+		getCurrentFunctionName(false);
+		return result;
+	}
+	
+	public static boolean isGRBD() {
+		getCurrentFunctionName(true);
+		boolean result = isGR() || isBD();
 		getCurrentFunctionName(false);
 		return result;
 	}
@@ -266,7 +275,7 @@ public class SelTestCase {
 	public static void initReportTime() {
 		logs.debug("Case started: " + Thread.currentThread().getStackTrace()[2]);
 	}
-	
+
 	public static void getBrowserWait(String BrowserName) {
 		try {
 			int waitBrowser = RandomUtils.nextInt(0, 2000);
@@ -348,7 +357,7 @@ public class SelTestCase {
 	}
 
 	public static void setAssert() {
-		softAssert.set(new SoftAssert());
+		softAssert.set(new CustomSoftAssert());
 	}
 
 	/**
@@ -391,6 +400,8 @@ public class SelTestCase {
 		try {
 			Common.launchApplication(test.getParameter("browserName"), test.getParameter("Env"),
 					test.getParameter("Brand"));
+			if (isMobile())
+				getDriver().navigate().refresh();
 
 		} catch (Throwable t) {
 			logs.debug(MessageFormat.format(LoggingMsg.DEBUGGING_TEXT, t));
@@ -420,11 +431,13 @@ public class SelTestCase {
 	}
 
 	@BeforeSuite
-	public static void excelSheetReader() throws Exception {
+	public static void excelSheetReader(XmlTest test) throws Exception {
+		testObj.set(test);
 		logs.debug("loading data store");
 		users = Common.readUsers();
 		addresses = Common.readAddresses();
 		paymentCards = Common.readPaymentcards();
+		products = Common.readLocalInventory();
 
 	}
 
@@ -455,6 +468,8 @@ public class SelTestCase {
 				passedNumber++;
 			} else if (status.get("Status").toLowerCase().contains("fail")) {
 				failedNumber++;
+			} else if (status.get("Status").toLowerCase().contains("skip")) {
+				skippedNumber++;
 			}
 			logs.debug(Arrays.asList(status) + "");
 			if (!(status.get("TestName").equals("") || status.get("StartTime").equals("")

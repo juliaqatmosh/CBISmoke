@@ -12,6 +12,7 @@
 			<class name="com.generic.tests.FG.Search_PLP.SearchBase" />
 		</classes>
 	</test><!-- Test -->
+
 	<test name="Seach validation mobile_iPad">
 		<parameter name="browserName" value="mobile_iPad"></parameter>
 		<parameter name="Env" value="prod"></parameter>
@@ -20,6 +21,7 @@
 			<class name="com.generic.tests.FG.Search_PLP.SearchBase" />
 		</classes>
 	</test><!-- Test -->
+
 	<test name="Seach validation mobile_iPhone x">
 		<parameter name="browserName" value="mobile_iPhone X"></parameter>
 		<parameter name="Env" value="prod"></parameter>

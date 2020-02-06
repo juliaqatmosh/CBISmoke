@@ -21,6 +21,9 @@ import javax.imageio.ImageIO;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.testng.Assert;
+import org.testng.SkipException;
+
 import com.generic.setup.GlobalVariables.browsers;
 import com.generic.util.ReportUtil;
 import com.generic.util.dataProviderUtils;
@@ -151,13 +154,47 @@ public class Common extends SelTestCase {
 		setTestStatus("Pass");
 
 	}
-
-	public static void testIgnored() {
-		logs.debug("Test Status: Ignored");
-		setTestStatus("Ignore");
+	
+	/**
+	 * Set test case status that will appear in the Automation Report
+	 *
+	 */
+	public static void testPass(String CaseDescription) {
+		logCaseDetailds(CaseDescription);
+		logs.debug("Test Status: PASS");
+		setTestStatus("Pass");
 
 	}
 
+	public static void testSkipped(String CaseDescription) {
+		logCaseDetailds(CaseDescription);
+		logs.debug("Test Status: Skipped");
+		setTestStatus("Skip");
+		throw new SkipException("Test Skipped");
+
+	}
+
+	
+	/**
+	 * Set test case status that will appear in the Automation Report
+	 *
+	 *
+	 */
+	public static void testFail(Throwable t, String CaseDescription, String screenshotName) {
+		logCaseDetailds(CaseDescription + "<br><b><font color='red'>Failure Reason: </font></b>"
+				+ t.getMessage().replace("\n", "").trim());
+		setTestCaseDescription(getTestCaseDescription());
+		logs.debug(MessageFormat.format(LoggingMsg.DEBUGGING_TEXT, t.getMessage()));
+		t.printStackTrace();
+
+		logs.debug("Test Status: Failed");
+		setTestStatus("Fail: " + t.getMessage());
+		logs.debug(MessageFormat.format(LoggingMsg.CURRENT_URL, SelTestCase.getDriver().getCurrentUrl()));
+
+		ReportUtil.takeScreenShot(getDriver(), screenshotName);
+		Assert.fail(t.getMessage());
+	}
+	
 	/**
 	 * Set test case status that will appear in the Automation Report
 	 *
@@ -282,6 +319,11 @@ public class Common extends SelTestCase {
 		 * /300441924, color=claycourt, size=SizeUni, £24.26 4, qty=1 } } ]
 		 */
 		LinkedHashMap<String, Object> products = new LinkedHashMap<>();
+		ArrayList<String> FGproducts = new ArrayList<String>();
+		ArrayList<String> GRproducts = new ArrayList<String>();
+		ArrayList<String> GHproducts = new ArrayList<String>();
+		ArrayList<String> RYproducts = new ArrayList<String>();
+		ArrayList<String> BDproducts = new ArrayList<String>();
 
 		dataProviderUtils TDP = dataProviderUtils.getInstance();
 		Object[][] data = TDP.getData(SheetVariables.products, 1);
@@ -289,34 +331,34 @@ public class Common extends SelTestCase {
 		// data map
 		int header = 0;
 		int name = 0;
-		int id = 1;
-		int title = 2;
-		int url = 3;
-		int qty = 4;
-		int color = 5;
-		int fleece = 6;
-		int memory = 7;
-		int size = 8;
-		int bundleProducts = 9;
-		int desc = 10;
-		int price = 11;
+		int brand = 1;
+		int url = 2;
+		
 
 		for (int row = 1; row < data.length; row++) {
-			LinkedHashMap<String, Object> product = new LinkedHashMap<>();
-			product.put((String) data[header][id], data[row][id]);
-			product.put((String) data[header][title], data[row][title]);
-			product.put((String) data[header][url], data[row][url]);
-			product.put((String) data[header][qty], data[row][qty]);
-			product.put((String) data[header][color], data[row][color]);
-			product.put((String) data[header][fleece], data[row][fleece]);
-			product.put((String) data[header][memory], data[row][memory]);
-			product.put((String) data[header][size], data[row][size]);
-			product.put((String) data[header][bundleProducts], data[row][bundleProducts]);
-			product.put((String) data[header][desc], data[row][desc]);
-			product.put((String) data[header][price], data[row][price]);
 
-			products.put((String) data[row][name], product);
+			if (isFG() && brands.FG.equalsIgnoreCase((String) data[row][brand])) {
+				FGproducts.add((String) data[row][url]);
+			}
+			else if (isGR()&& brands.GR.equalsIgnoreCase((String) data[row][brand])) {
+				GRproducts.add((String) data[row][url]);
+			}
+			else if (isGH()&& brands.GH.equalsIgnoreCase((String) data[row][brand])) {
+				GHproducts.add((String) data[row][url]);
+			}
+			else if (isRY()&& brands.RY.equalsIgnoreCase((String) data[row][brand])) {
+				RYproducts.add((String) data[row][url]);
+			}
+			else if (isBD()&& brands.BD.equalsIgnoreCase((String) data[row][brand])) {
+				BDproducts.add((String) data[row][url]);
+			}
 		}
+		products.put(brands.FG, FGproducts);
+		products.put(brands.GR, GRproducts);
+		products.put(brands.GH, GHproducts);
+		products.put(brands.RY, RYproducts);
+		products.put(brands.BD, BDproducts);
+		
 		logs.debug("Products: " + Arrays.asList(products) + "");
 		return products;
 	}// readProducts

@@ -4,10 +4,12 @@ import java.text.MessageFormat;
 import java.util.LinkedHashMap;
 import java.util.NoSuchElementException;
 import com.generic.page.CheckOut;
+import com.generic.page.PDP;
 import com.generic.page.Registration;
 import com.generic.setup.ExceptionMsg;
 import com.generic.setup.GlobalVariables;
 import com.generic.setup.LoggingMsg;
+import com.generic.setup.PDPs;
 import com.generic.setup.SelTestCase;
 import com.generic.util.RandomUtilities;
 
@@ -35,8 +37,8 @@ public class RegisteredCheckoutSingleAddress extends SelTestCase {
 			Registration.registerFreshUser(userMail, userPassword, fName, lName);
 
 			// Add products to cart
-			CheckOut.searchForProductsandAddToCart(productsCount);
-
+			CheckOut.addRandomProductTocart(productsCount);
+			
 			// Navigating to Cart by URL
 			CheckOut.navigatetoCart();
 
@@ -86,20 +88,12 @@ public class RegisteredCheckoutSingleAddress extends SelTestCase {
 			Thread.sleep(3500);
 
 			CheckOut.closePromotionalModal();
-
-			// Check number of products in confirmation page
-			sassert().assertTrue(CheckOut.checkProductsinConfirmationPage() == productsCountStepTWO,
-					"Some products are missing in confirmation page ");
-
-			// Check if shipping costs match
-			sassert().assertTrue(CheckOut.getShippingCosts().equals(orderShipping), "Shipping cost value issue ");
-
-			// Check if tax cost match
-			sassert().assertTrue(CheckOut.getTaxCosts(GlobalVariables.FG_TAX_CONFIRMATION).equals(orderTax),
-					"Tax value issue ");
-
-			// Check if subtotal value match
-			sassert().assertTrue(CheckOut.getSubTotal().equals(orderSubTotal), "Subtotal value issue ");
+			
+			Thread.sleep(1500);
+			
+			CheckOut.checkOrderValues(productsCount,orderShipping, orderTax,orderSubTotal );
+						
+			CheckOut.printOrderIDtoLogs();
 
 			getCurrentFunctionName(false);
 

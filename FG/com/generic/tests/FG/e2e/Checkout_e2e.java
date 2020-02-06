@@ -70,20 +70,12 @@ public class Checkout_e2e extends SelTestCase {
 			Thread.sleep(2000);
 
 			CheckOut.closeRegisterButton();
-
-			// Check number of products in confirmation page
-			sassert().assertTrue(CheckOut.checkProductsinConfirmationPage() == productsCount,
-					"Some products are missing in confirmation page ");
-
-			// Check if shipping costs match
-			sassert().assertTrue(CheckOut.getShippingCosts().equals(orderShipping), "Shipping cost value issue ");
-
-			// Check if tax cost match
-			sassert().assertTrue(CheckOut.getTaxCosts(GlobalVariables.FG_TAX_CONFIRMATION).equals(orderTax),
-					"Tax value issue ");
-
-			// Check if subtotal value match
-			sassert().assertTrue(CheckOut.getSubTotal().equals(orderSubTotal), "Subtotal value issue ");
+			
+			Thread.sleep(1500);
+			
+			CheckOut.checkOrderValues(productsCount,orderShipping, orderTax,orderSubTotal );
+			
+			CheckOut.printOrderIDtoLogs();			
 
 			getCurrentFunctionName(false);
 
@@ -153,20 +145,12 @@ public class Checkout_e2e extends SelTestCase {
 			Thread.sleep(3500);
 
 			CheckOut.closePromotionalModal();
-
-			// Check number of products in confirmation page
-			sassert().assertTrue(CheckOut.checkProductsinConfirmationPage() == productsCountStepTWO,
-					"Some products are missing in confirmation page ");
-
-			// Check if shipping costs match
-			sassert().assertTrue(CheckOut.getShippingCosts().equals(orderShipping), "Shipping cost value issue ");
-
-			// Check if tax cost match
-			sassert().assertTrue(CheckOut.getTaxCosts(GlobalVariables.FG_TAX_CONFIRMATION).equals(orderTax),
-					"Tax value issue ");
-
-			// Check if subtotal value match
-			sassert().assertTrue(CheckOut.getSubTotal().equals(orderSubTotal), "Subtotal value issue ");
+			
+			Thread.sleep(1500);
+			
+			CheckOut.checkOrderValues(productsCount,orderShipping, orderTax,orderSubTotal );
+			
+			CheckOut.printOrderIDtoLogs();			
 
 			getCurrentFunctionName(false);
 

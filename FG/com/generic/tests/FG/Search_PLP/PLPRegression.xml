@@ -3,7 +3,6 @@
 <suite name="PLP regression" parallel="tests" thread-count="3"
 	data-provider-thread-count="1">
 
-
 	<test name="Seach validation chrome">
 		<parameter name="browserName" value="Chrome"></parameter>
 		<parameter name="Env" value="prod"></parameter>
@@ -13,7 +12,6 @@
 			<class name="com.generic.tests.FG.Search_PLP.PLP_Base" />
 		</classes>
 	</test><!-- Test -->
-
 
 	<test name="Seach validation mobile_iPad">
 		<parameter name="browserName" value="mobile_iPad"></parameter>
@@ -25,7 +23,6 @@
 		</classes>
 	</test><!-- Test -->
 
-
 	<test name="Seach validation mobile_iPhone x">
 		<parameter name="browserName" value="mobile_iPhone X"></parameter>
 		<parameter name="Env" value="prod"></parameter>
@@ -35,10 +32,6 @@
 			<class name="com.generic.tests.FG.Search_PLP.PLP_Base" />
 		</classes>
 	</test><!-- Test -->
-
-
-
-
 
 
 </suite> <!-- Suite -->

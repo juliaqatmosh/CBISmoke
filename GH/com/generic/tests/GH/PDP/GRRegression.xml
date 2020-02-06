@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="GRRegression" parallel="tests" thread-count="3"
+	data-provider-thread-count="1">
+
+	<test name="GH Chrome">
+		<parameter name="browserName" value="Chrome"></parameter>
+		<parameter name="Env" value="prod"></parameter>
+		<parameter name="Brand" value="GH"></parameter>
+		<classes>
+			<class name="com.generic.tests.GH.PDP.GRBase" />
+		</classes>
+	</test><!-- Test -->
+
+	<test name="GH iPad">
+		<parameter name="browserName" value="mobile_iPad"></parameter>
+		<parameter name="Env" value="prod"></parameter>
+		<parameter name="Brand" value="GH"></parameter>
+
+		<classes>
+			<class name="com.generic.tests.GH.PDP.GRBase" />
+		</classes>
+	</test>
+	<test name="GH iPhone">
+		<parameter name="browserName" value="mobile_iPhone X"></parameter>
+		<parameter name="Env" value="prod"></parameter>
+		<parameter name="Brand" value="GH"></parameter>
+
+		<classes>
+			<class name="com.generic.tests.GH.PDP.GRBase" />
+		</classes>
+	</test>
+</suite> <!-- Suite --> 
