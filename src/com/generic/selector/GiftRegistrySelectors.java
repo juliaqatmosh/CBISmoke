@@ -3,6 +3,25 @@ package com.generic.selector;
 import com.generic.setup.cselector;
 
 public class GiftRegistrySelectors {
+	public static final cselector GH_GRLink=new cselector("css,.col-links2 > li:nth-child(4) > a");
+	public static final cselector GHSaveToGR = new cselector("css,.gwt-product-detail-buttons-container:nth-child(2) > button", "css,.u-margin-end-md > button");
+	public static final cselector GHAddGRProductToCart = new cselector("css,.options >div> a", "css,.t-registry-list-product-list__add-to-cart-btn.pw-button");
+
+	public static final cselector GHHomePageMenueToGR = new cselector("css,div:nth-child(1)>.pw-accordion__header");
+	public static final cselector GHGifRegistryLink = new cselector("css,div:nth-child(3)>.pw-list-tile>.pw-link");
+
+	public static final cselector GHEmailInput = new cselector("css,[type=email].c-custom-input");
+	public static final cselector GHPasswordInput = new cselector("css,[type=password].c-custom-input");
+	public static final cselector GHLoginBtn = new cselector("css,.t-login__submit-button>.pw-button");
+
+	public static final cselector GHViewRegistryButton = new cselector("css,.gwt-added-to-gift-registry-modal .primary", "css,.m-add-to-registry .pw--primary");
+
+	public static final cselector GHChechoutBtn = new cselector("css,.pw-button.pw--primary");
+	public static final cselector GHCreateRegistryButton = new cselector("css,[onclick*=submitCreateRegistyLogon]","css,#giftRegistryFormsNew #newRegistry a");
+	
+	
+	
+	
 	public static final cselector GRLink = new cselector("css,#giftregistry a");
 	public static final cselector FGCreateRegistryButton = new cselector("css,.create-registry","css,.responsive-content .create-registry");
 	public static final cselector GRCreateRegistryButton = new cselector("css,[onclick*=submitCreateRegisty]","css,.responsive-content [onclick*=submitCreateRegisty]");

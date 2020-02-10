@@ -2,24 +2,23 @@ package com.generic.tests.GR.PDP;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
-import org.testng.Assert;
+import org.testng.SkipException;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import org.testng.xml.XmlTest;
 
+import com.generic.page.PDP;
 import com.generic.setup.Common;
 import com.generic.setup.LoggingMsg;
 import com.generic.setup.SelTestCase;
 import com.generic.setup.SheetVariables;
 import com.generic.tests.GR.PDP.WistListGuestValidation;
 import com.generic.tests.GR.PDP.PDPValidation;
-import com.generic.util.ReportUtil;
 import com.generic.util.SASLogger;
 import com.generic.util.dataProviderUtils;
 
 public class PDPBase extends SelTestCase {
-
 
 	// possible scenarios
 	public static final String singlePDP = "Validate PDP Single active elements";
@@ -54,42 +53,45 @@ public class PDPBase extends SelTestCase {
 	}
 
 	@Test(dataProvider = "PDP_SC")
-	public void PDPTest(String caseId, String runTest, String desc, String proprties)
-			throws Exception {
+	public void PDPTest(String caseId, String runTest, String desc, String proprties) throws Exception {
 		Testlogs.set(new SASLogger("PDP_SC " + getBrowserName()));
 		// Important to add this for logging/reporting
 		setTestCaseReportName(SheetVariables.PDPCaseId);
 		Testlogs.get().debug("Case Browser: " + testObject.getParameter("browserName"));
-		logCaseDetailds(MessageFormat.format(LoggingMsg.TEST_CASE_DESC, testDataSheet + "." + caseId,
-				this.getClass().getCanonicalName(), desc));
+		String CaseDescription = MessageFormat.format(LoggingMsg.TEST_CASE_DESC, testDataSheet + "." + caseId,
+				this.getClass().getCanonicalName(), desc.replace("\n", "<br>--"));
+		initReportTime();
 
-		try { 
+		try {
 
-			if (proprties.contains(this.singlePDP)) {
-				PDPValidation.validate(singlePDPSearchTerm);
+			if (proprties.contains(singlePDP)) {
+				PDP.NavigateToPDP(singlePDPSearchTerm);
+				PDPValidation.validate(false);
 			}
-			if (proprties.contains(this.bundlePDP)) {
-				PDPValidation.validate(BundlePDPSearchTerm);
+			if (proprties.contains(bundlePDP)) {
+				PDP.NavigateToPDP(BundlePDPSearchTerm);
+				PDPValidation.validate(false);
 			}
 
-			if (proprties.contains(this.personalizedPDP)) {
-				PDPValidation.validate(personalizedPDPSearchTerm);
+			if (proprties.contains(personalizedPDP)) {
+				PDP.NavigateToPDP(personalizedPDPSearchTerm);
+				PDPValidation.validate(true);
 			}
 
-			if (proprties.contains(this.wishListGuestValidation)) {
+			if (proprties.contains(wishListGuestValidation)) {
 				WistListGuestValidation.validate();
 			}
 
 			sassert().assertAll();
-			Common.testPass();
+
+			Common.testPass(CaseDescription);
 		} catch (Throwable t) {
-			setTestCaseDescription(getTestCaseDescription());
-			Testlogs.get().debug(MessageFormat.format(LoggingMsg.DEBUGGING_TEXT, t.getMessage()));
-			t.printStackTrace();
-			String temp = getTestCaseReportName();
-			Common.testFail(t, temp);
-			ReportUtil.takeScreenShot(getDriver(), testDataSheet + "_" + caseId);
-			Assert.assertTrue(false, t.getMessage());
+			if ((getTestStatus() != null) && getTestStatus().equalsIgnoreCase("skip")) {
+				throw new SkipException("Skipping this exception");
+			} else {
+				Common.testFail(t, CaseDescription, testDataSheet + "_" + caseId);
+			}
+
 		} // catch
 	}// test
 }

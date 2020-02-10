@@ -5,10 +5,7 @@ import java.util.ArrayList;
 
 import com.generic.setup.SelTestCase;
 
-
-
 public class GlobalVariables extends SelTestCase {
-
 
 	public class browsers {
 		public static final String firefox = "Firefox";
@@ -19,50 +16,43 @@ public class GlobalVariables extends SelTestCase {
 		public static final String IE = "IE";
 		public static final String edge = "edge";
 		public static final String iOS = "IOS_grid";
+		
 	}
-	
-	//Iframe ID for CVV Filed in chekout
-	public static final String CVV_Iframe_ID ="cvv_Tokenizer";
-	
-	//Indexes for tax value
-	public static final int GR_TAX_CART =1;
-	public static final int GR_TAX_CONFIRMATION =0;
 
-	public static final int FG_TAX_CART =0;
-	public static final int FG_TAX_CONFIRMATION =0;
+	public class randomPLP {
+	public static final String FG = "/indoor-decor/indoor-area-rugs/?";
+	public static final String GR = "/indoor-decor/indoor-lighting/?";
+	public static final String GH = "/womens-fashion/tops-tees/";
+	public static final String RY = "/store/plus-size-dresses/?";
+	public static final String BD = "/lighting/all-lighting/?";
 
-	
+	}
+	// Iframe ID for CVV Filed in chekout
+	public static final String CVV_Iframe_ID = "cvv_Tokenizer";
 
-	
-	/*public String firstName;
-    public String lastName;
-    public String emailAddress;
-    public String confEmailAddress;
-    public String zipCode;
-    public String country;
-    public String password;
-    public String confPassword;*/
-   
-    public ArrayList<String> list;
+	// Indexes for tax value
+	public static final int GR_TAX_CART = 0;
+	public static final int GR_TAX_CART_MOBILE = 0;
+	public static final int GR_TAX_CONFIRMATION = 0;
 
-    public static boolean flag = false;
+	public static final int FG_TAX_CART = 0;
+	public static final int FG_TAX_CONFIRMATION = 0;
 
-   
-    public GlobalVariables(String sheetName, int row) {
-    	getCurrentFunctionName(true);
-    	logs.debug(MessageFormat.format(LoggingMsg.READING_DATA_FROM_SHEET, sheetName, row));
+	/*
+	 * public String firstName; public String lastName; public String emailAddress;
+	 * public String confEmailAddress; public String zipCode; public String country;
+	 * public String password; public String confPassword;
+	 */
 
-       /* firstName = SelTestCase.getCONFIG().getProperty("firstName");
-        lastName = SelTestCase.getCONFIG().getProperty("lastName");
-        emailAddress = SelTestCase.getCONFIG().getProperty("emailAddress");
-        confEmailAddress = SelTestCase.getCONFIG().getProperty("confEmailAddress");
-        zipCode = SelTestCase.getCONFIG().getProperty("postalCode");
-        password = SelTestCase.getCONFIG().getProperty("password");
-        confPassword = SelTestCase.getCONFIG().getProperty("confPassword");
-        country = SelTestCase.getCONFIG().getProperty("country");
-        */
-        SelTestCase.getCurrentFunctionName(false);
+	public ArrayList<String> list;
 
-    }
-     
+	public static boolean flag = false;
+
+	public GlobalVariables(String sheetName, int row) {
+		getCurrentFunctionName(true);
+		logs.debug(MessageFormat.format(LoggingMsg.READING_DATA_FROM_SHEET, sheetName, row));
+		SelTestCase.getCurrentFunctionName(false);
+
+	}
+
 }
